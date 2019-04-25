@@ -1,0 +1,6 @@
+--->   UP @ 30159  <------
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+[GIN-debug] GET   /g/                       --> main.func·003 (4 handlers)
