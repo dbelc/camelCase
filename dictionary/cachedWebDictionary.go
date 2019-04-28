@@ -15,6 +15,11 @@ type CachedWebDictionary struct {
 
 // IsWord implements Dictionary.IsWord
 func (dict *CachedWebDictionary) IsWord(str string) (isWord bool) {
+	isWord = false
+	if len(str) == 0 {
+		return
+	}
+
 	var cached bool
 	if isWord, cached = dict.cache[str]; cached {
 		return

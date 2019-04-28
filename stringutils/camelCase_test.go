@@ -1,6 +1,10 @@
 package stringutils
 
-import "testing"
+import (
+	"github.com/dbelc/camelCase/dictionary"
+	"strings"
+	"testing"
+)
 
 type subtest struct {
 	name   string
@@ -26,7 +30,7 @@ type testCase struct {
 
 func testCamelCase(t *testing.T, cases []testCase, assert func(testCase, string, error)) {
 	for _, c := range cases {
-		got, err := CamelCase(c.in)
+		got, err := CamelCase(c.in, testDictInst)
 		assert(c, got, err)
 	}
 }
@@ -80,6 +84,8 @@ func multiWord(t *testing.T) {
 		{"chaircouchsink", "chairCouchSink"},
 		{"GuitarLampRemote", "guitarLampRemote"},
 		{"VACUUMTREEGRILLFOOD", "vacuumTreeGrillFood"},
+
+		{"thisisasentence", "thisIsASentence"},
 	})
 }
 
@@ -98,3 +104,61 @@ func nonWords(t *testing.T) {
 		{"testCaseOfawaefiaoweif", ""},
 	})
 }
+
+// Create a test dictionary for the test cases
+type testDictionary struct {
+	cache map[string]bool
+}
+
+func (dict *testDictionary) IsWord(str string) bool {
+	lower := strings.ToLower(str)
+	if _, prs := dict.cache[lower]; prs {
+		return true
+	}
+
+	return false
+}
+
+func newTestDictionary(init ...string) *testDictionary {
+	cache := make(map[string]bool)
+	for _, word := range init {
+		cache[strings.ToLower(word)] = true
+	}
+
+	return &testDictionary{cache}
+}
+
+var testDictInst dictionary.Dictionary = newTestDictionary(
+	"word",
+	"title",
+	"capital",
+	"mixed",
+	"one",
+	"two",
+	"three",
+	"four",
+	"five",
+	"six",
+	"seven",
+	"eight",
+	"chair",
+	"couch",
+	"sink",
+	"guitar",
+	"lamp",
+	"remote",
+	"vacuum",
+	"tree",
+	"grill",
+	"food",
+	"no",
+	"hello",
+	"four",
+	"phone",
+	"test",
+	"case",
+	"this",
+	"is",
+	"a",
+	"sentence",
+)
