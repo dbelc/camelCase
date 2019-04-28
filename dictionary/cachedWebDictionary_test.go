@@ -2,11 +2,9 @@ package dictionary
 
 import "testing"
 
-type subtestFn = func(*testing.T, *CachedWebDictionary)
-
 type subtest struct {
 	name   string
-	testFn subtestFn
+	testFn func(*testing.T)
 }
 
 func TestCachedWebDictionary(t *testing.T) {
@@ -15,15 +13,14 @@ func TestCachedWebDictionary(t *testing.T) {
 		{"Cached valid words", cachedValidWords},
 		{"Invalid words", invalidWords},
 	} {
-		t.Run(subtest.name, func(*testing.T) {
-			subtest.testFn(t, newCachedWebDictionary())
-		})
+		t.Run(subtest.name, subtest.testFn)
 	}
 }
 
 // Test helpers
 
-func testIsWord(want bool, t *testing.T, dict *CachedWebDictionary, cases []string) {
+func testIsWord(want bool, t *testing.T, cases []string) {
+	dict := New(CachedWebDictionary{})
 	for _, c := range cases {
 		if isWord := dict.IsWord(c); isWord != want {
 			t.Errorf("CachedWebDictionary.IsWord(%q) == %v, want %v", c, isWord, want)
@@ -33,8 +30,8 @@ func testIsWord(want bool, t *testing.T, dict *CachedWebDictionary, cases []stri
 
 // Test cases
 
-func validWords(t *testing.T, dict *CachedWebDictionary) {
-	testIsWord(true, t, dict, []string{
+func validWords(t *testing.T) {
+	testIsWord(true, t, []string{
 		// Basic test for valid dictionary words
 		"one",
 		"two",
@@ -45,8 +42,9 @@ func validWords(t *testing.T, dict *CachedWebDictionary) {
 	})
 }
 
-func cachedValidWords(t *testing.T, dict *CachedWebDictionary) {
+func cachedValidWords(t *testing.T) {
 	// Ensure the cache is empty
+	dict := newCachedWebDictionary()
 	dict.cache = make(map[string]bool)
 
 	// Test the cache
@@ -93,8 +91,8 @@ func cachedValidWords(t *testing.T, dict *CachedWebDictionary) {
 	}
 }
 
-func invalidWords(t *testing.T, dict *CachedWebDictionary) {
-	testIsWord(false, t, dict, []string{
+func invalidWords(t *testing.T) {
+	testIsWord(false, t, []string{
 		"",
 		"thisismanywords",
 		"fawoefjasawef",
