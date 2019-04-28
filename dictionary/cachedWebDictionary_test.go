@@ -25,8 +25,9 @@ func TestCachedWebDictionary(t *testing.T) {
 
 func testIsWord(want bool, t *testing.T, dict *CachedWebDictionary, cases []string) {
 	for _, c := range cases {
-		isWord := dict.IsWord(c)
-		t.Errorf("CachedWebDictionary.IsWord(%q) == %v, want %v", c, isWord, want)
+		if isWord := dict.IsWord(c); isWord != want {
+			t.Errorf("CachedWebDictionary.IsWord(%q) == %v, want %v", c, isWord, want)
+		}
 	}
 }
 

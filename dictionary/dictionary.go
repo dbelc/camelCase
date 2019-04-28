@@ -19,5 +19,7 @@ func New(t interface{}) Dictionary {
 }
 
 func newCachedWebDictionary() *CachedWebDictionary {
-	return &CachedWebDictionary{make(map[string]bool)}
+	return &CachedWebDictionary{
+		cache: make(map[string]bool),
+	}
 }
