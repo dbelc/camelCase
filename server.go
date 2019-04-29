@@ -2,21 +2,44 @@ package main
 
 import (
 	"fmt"
+	"github.com/dbelc/camelCase/dictionary"
 	"github.com/dbelc/camelCase/stringutils"
+	"log"
 	"net/http"
 	"os"
 )
 
+const (
+	defaultPort = "8080"
+
+	camelCasePath         = "/api/camelCase/"
+	camelCasePathLen      = len(camelCasePath)
+	errorEmptyStringInput = "Invalid input: String cannot be empty."
+)
+
+var dict = dictionary.New(dictionary.CachedWebDictionary{})
+
 func camelCaseHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, stringutils.CamelCase("Test"))
+	input := r.URL.Path[camelCasePathLen:]
+	if len(input) == 0 {
+		http.Error(w, errorEmptyStringInput, http.StatusBadRequest)
+	}
+
+	camelCase, err := stringutils.CamelCase(input, dict)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+
+	fmt.Fprintf(w, camelCase)
 }
 
 func main() {
-	port := "3001"
-	if os.Getenv("HTTP_PLATFORM_PORT") != "" {
-		port = os.Getenv("HTTP_PLATFORM_PORT")
+	port := defaultPort
+	if platformPort := os.Getenv("HTTP_PLATFORM_PORT"); platformPort != "" {
+		port = platformPort
 	}
 
-	http.HandleFunc("/camelCase/", camelCaseHandler)
-	http.ListenAndServe(":"+port, nil)
+	http.HandleFunc(camelCasePath, camelCaseHandler)
+
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
