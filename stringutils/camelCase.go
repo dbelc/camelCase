@@ -44,14 +44,14 @@ func CamelCase(in string, dict dictionary.Dictionary) (string, error) {
 	return string(runes), nil
 }
 
-func findLongestWordIn(runes []rune, dict dictionary.Dictionary) (wordLength int) {
-	wordLength = -1
-	for i := range runes {
-		substr := string(runes[0 : i+1])
+func findLongestWordIn(runes []rune, dict dictionary.Dictionary) int {
+	runesLen := len(runes)
+	for length := runesLen; length >= 0; length-- {
+		substr := string(runes[0:length])
 		if dict.IsWord(substr) {
-			wordLength = i + 1
+			return length
 		}
 	}
 
-	return
+	return -1
 }
