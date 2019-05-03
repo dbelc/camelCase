@@ -86,6 +86,8 @@ func multiWord(t *testing.T) {
 		{"VACUUMTREEGRILLFOOD", "vacuumTreeGrillFood"},
 
 		{"thisisasentence", "thisIsASentence"},
+
+		{"okaytest", "okayTest"},
 	})
 }
 
@@ -161,4 +163,7 @@ var testDictInst dictionary.Dictionary = newTestDictionary(
 	"is",
 	"a",
 	"sentence",
+	"ok",
+	"okay",
+	"test",
 )

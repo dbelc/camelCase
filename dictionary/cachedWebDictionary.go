@@ -25,10 +25,8 @@ func (dict *CachedWebDictionary) IsWord(str string) (isWord bool) {
 		return
 	}
 
-	if isWord = isWordInOxfordDictionary(str); isWord {
-		// Found a word. Add to the cache for later.
-		dict.cache[str] = true
-	}
+	isWord = isWordInOxfordDictionary(str)
+	dict.cache[str] = isWord
 
 	return
 }

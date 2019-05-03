@@ -25,6 +25,12 @@ func camelCaseHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, errorEmptyStringInput, http.StatusBadRequest)
 	}
 
+	defer func() {
+		if r := recover(); r != nil {
+			http.Error(w, "An unexpected error occurred", http.StatusInternalServerError)
+		}
+	}()
+
 	camelCase, err := stringutils.CamelCase(input, dict)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
