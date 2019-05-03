@@ -32,7 +32,7 @@ func (dict *CachedWebDictionary) IsWord(str string) (isWord bool) {
 }
 
 const (
-	endpoint = "lemmas"
+	endpoint = "entries"
 	langCode = "en-us"
 	// Format with <endpoint>, <langCode>, <word_id>
 	oxfordAPIURLFormat = "https://od-api.oxforddictionaries.com/api/v2/%v/%v/%v"
